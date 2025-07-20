@@ -70,20 +70,15 @@ housing_median_age_lessEqual50.mean()
 ```python
 median_house_correlation = df.corr()[['median_house_value']]
 ```
-
-```python
-median_house_correlation
-```
-
 ```python
 median_house_correlation.sort_values(by='median_house_value', inplace=True)
 ```
-
 ```python
 plt.figure(figsize=(4, 8))
 sns.heatmap(median_house_correlation, annot=True, cmap='rocket')
 plt.title('\'median_house_value\' Correlation Matrix Heatmap', pad=20, fontsize=15)
 ```
+![correlation with house value](plots/cell_output_0.png)
 
 ### 🖊 **Comment on Correlations**
 
@@ -97,6 +92,7 @@ plt.title('\'median_house_value\' Correlation Matrix Heatmap', pad=20, fontsize=
 plt.figure(figsize=(12, 8))
 sns.jointplot(x='median_income', y='median_house_value', data=df, kind='reg', line_kws={'color': 'red'}, height=8)
 ```
+![Regression Plot: Income vs House Value](plots/cell_output_1.png)
 
 ### 🗺 **Scatterplot with Spatial Reference**
 
@@ -124,6 +120,7 @@ axis.set_xlabel('Longitude', fontsize=12)
 axis.set_ylabel('Latitude', fontsize=12)
 plt.legend(fontsize=12, bbox_to_anchor=(1, 1), loc='upper left')
 ```
+![Scatterplot with Spatial Reference](plots/cell_output_2.png)
 
 ---
 
@@ -161,6 +158,7 @@ plt.figure(figsize=(12, 8))
 sns.histplot(data=df.sort_values(by='median_income'), x='income_cat', hue='ocean_proximity', multiple='dodge')
 plt.grid(True, alpha=0.6, axis='y')
 ```
+![Histogram of Income Category by Ocean Proximity](plots/cell_output_3.png)
 
 ### 📉 **Bar Plot: Income Category vs House Value**
 
@@ -169,6 +167,7 @@ plt.figure(figsize=(12, 8))
 plt.grid(True, alpha=0.6, axis='y')
 sns.barplot(x='income_cat', y='median_house_value', data=df.sort_values(by='median_income'))
 ```
+![Income Category vs House Value](plots/cell_output_4.png)
 
 ### 🌊 **Bar Plot: Ocean Proximity vs House Value**
 
@@ -177,6 +176,8 @@ plt.figure(figsize=(12, 8))
 sns.barplot(x='ocean_proximity', y='median_house_value', data=df)
 plt.grid(True, alpha=0.6, axis='y')
 ```
+![Ocean Proximity vs House Value](plots/cell_output_5.png)
+
 
 ### 🔥 **Heatmap: Income Category vs Ocean Proximity**
 
@@ -196,6 +197,8 @@ heatmap_df.sort_values(by=['<1H OCEAN','INLAND','NEAR BAY','NEAR OCEAN'], inplac
 plt.figure(figsize=(12, 8))
 sns.heatmap(heatmap_df, annot=True, fmt=".0f", linewidths=0.5)
 ```
+![Income Category vs Ocean Proximity](plots/cell_output_6.png)
+
 
 ---
 
@@ -234,6 +237,7 @@ for i, column in enumerate(num_df.columns, 1):
 plt.tight_layout()
 plt.show()
 ```
+![Identify Outliers](plots/cell_output_7.png)
 
 ### ❌ **Remove Outliers with IQR Rule**
 
@@ -267,6 +271,7 @@ fig.text(0.75, 0.95, 'Right: Data with Outliers Removed', ha='center', va='cente
 plt.tight_layout()
 fig.subplots_adjust(top=0.92, hspace=0.5)
 ```
+![Remove Outliers with IQR Rule](plots/cell_output_8.png)
 
 ---
 
