@@ -346,6 +346,5 @@ processed_y_test  = scaler.transform(y_test.to_numpy().reshape(-1,1))
 
 
 ### 👨‍💻 **Author**
-
-**Yasser Ismail**
-📍 Geospatial Engineer
+- **Yasser Ismail**
+- **Geospatial Engineer**
