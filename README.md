@@ -8,7 +8,7 @@ This project provides a comprehensive analysis and visualization of the Californ
 - Machine learning preprocessing
 
 
-### 📦1. **Import Libraries**
+### 📦 **Import Libraries**
 
 ```python
 # Importing pandas for data manipulation and analysis (tables, DataFrames)
@@ -34,15 +34,16 @@ import geopandas as gpd
 > * `geopandas`: enables spatial analysis using vector data like points, lines, and polygons.
 
 
-### 📂 **1. Load the housing.csv file**
+### 📂 **2. Load the `housing.csv` file**
 
 ```python
+# Load the housing dataset into a pandas DataFrame
 df = pd.read_csv('housing.csv')
 ```
 
-> Load housing dataset into a pandas DataFrame.
+> This command reads the `housing.csv` file and stores it in the `df` variable as a DataFrame.  
+> The DataFrame allows for structured analysis, filtering, and visualization of the housing data.
 
----
 
 ### 🧹 **2. Drop Missing Values**
 
