@@ -1,10 +1,3 @@
-
-# 🧠 Data Analysis and Preprocessing Project
-
-This project demonstrates the complete process of analyzing housing and text data using Python libraries such as Pandas, Seaborn, Matplotlib, GeoPandas, and Scikit-learn. It includes data cleaning, visualization, feature engineering, geospatial plotting, text preprocessing, and basic machine learning preparation.
-
----
-
 ```python
 import pandas as pd
 import numpy as np
@@ -569,9 +562,4 @@ processed_y_test  = scaler.transform(y_test.to_numpy().reshape(-1,1))
 
 
 ##Yasser I Barhoom (Geomatics Eng.)
-```
-
-
-```python
-
 ```
