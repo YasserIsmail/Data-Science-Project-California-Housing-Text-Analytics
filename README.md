@@ -34,7 +34,7 @@ import geopandas as gpd
 > * `geopandas`: enables spatial analysis using vector data like points, lines, and polygons.
 
 
-### 📂 **2. Load the `housing.csv` file**
+### 📂 **Load the `housing.csv` file**
 
 ```python
 # Load the housing dataset into a pandas DataFrame
@@ -45,7 +45,7 @@ df = pd.read_csv('housing.csv')
 > The DataFrame allows for structured analysis, filtering, and visualization of the housing data.
 
 
-### 🧹 **3. Drop Missing Values**
+### 🧹 **Drop Missing Values**
 
 ```python
 # Remove all rows that contain any missing values
@@ -55,7 +55,7 @@ df.dropna(inplace=True)
 > This command removes any row in the DataFrame that contains at least one missing (NaN) value.  
 > The `inplace=True` parameter ensures the change is applied directly to the original DataFrame.
 
-### 🧮 **4. Compute rooms per household**
+### 🧮 **Compute rooms per household**
 
 ```python
 # Add a new column that calculates average rooms per household
@@ -67,7 +67,7 @@ df['rooms_per_household'] = df['total_rooms'] / df['households']
 
 ---
 
-### 🧮 **5. Compute population per household**
+### 🧮 **Compute population per household**
 
 ```python
 # Add a new column that calculates population per household (note: the original formula uses total_rooms)
@@ -79,7 +79,7 @@ df['population_per_household'] = df['total_rooms'] / df['population']
 > `df['population_per_household'] = df['population'] / df['households']`
 
 
-### 📊 **6. Average house value for homes <= 50 years**
+### 📊 **Average house value for homes <= 50 years**
 
 ```python
 # Filter house values for homes that are 50 years old or less
@@ -94,7 +94,7 @@ housing_median_age_lessEqual50.mean()
 
 ---
 
-### 🔗 **7. Calculate correlation with house value**
+### 🔗 **Calculate correlation with house value**
 
 ```python
 # Compute correlation of all columns with 'median_house_value'
@@ -137,7 +137,7 @@ plt.title('\'median_house_value\' Correlation Matrix Heatmap', pad=20, fontsize=
 > - Negative correlation: `latitude`, `longitude`  
 > These insights guide feature selection in predictive modeling.
 
-### 📈 **8. Regression Plot: Income vs House Value**
+### 📈 **Regression Plot: Income vs House Value**
 
 ```python
 # Create a regression jointplot to visualize income vs house value
@@ -149,7 +149,7 @@ sns.jointplot(x='median_income', y='median_house_value', data=df, kind='reg', li
 
 ---
 
-### 🗺 **9. Scatterplot with Spatial Reference**
+### 🗺 **Scatterplot with Spatial Reference**
 
 ```python
 # Load California boundary shapefile and set CRS to EPSG:4326
@@ -184,7 +184,7 @@ plt.legend(fontsize=12, bbox_to_anchor=(1, 1), loc='upper left')
 
 ---
 
-### 💰 **10. Categorize Income**
+### 💰 **Categorize Income**
 
 ```python
 # Compute income quantiles for binning
@@ -216,7 +216,7 @@ df.loc[df['median_income'] >= at95, 'income_cat'] = 'Very high'
 
 ---
 
-### 📊 **11. Histogram of Income Category by Ocean Proximity**
+### 📊 **Histogram of Income Category by Ocean Proximity**
 
 ```python
 # Show distribution of income categories by ocean proximity
@@ -229,7 +229,7 @@ plt.grid(True, alpha=0.6, axis='y')
 
 ---
 
-### 📉 **12. Bar Plot: Income Category vs House Value**
+### 📉 **Bar Plot: Income Category vs House Value**
 
 ```python
 # Compare house values by income category
@@ -242,7 +242,7 @@ sns.barplot(x='income_cat', y='median_house_value', data=df.sort_values(by='medi
 
 ---
 
-### 🌊 **13. Bar Plot: Ocean Proximity vs House Value**
+### 🌊 **Bar Plot: Ocean Proximity vs House Value**
 
 ```python
 # Compare house values by proximity to the ocean
@@ -255,7 +255,7 @@ plt.grid(True, alpha=0.6, axis='y')
 
 ---
 
-### 🔥 **14. Heatmap: Income Category vs Ocean Proximity**
+### 🔥 **Heatmap: Income Category vs Ocean Proximity**
 
 ```python
 # Create a pivot table of average house values by income category and ocean proximity
@@ -280,7 +280,7 @@ sns.heatmap(heatmap_df, annot=True, fmt=".0f", linewidths=0.5)
 
 ---
 
-### 🔁 **15. Reload Data and Fill Missing Values**
+### 🔁 **Reload Data and Fill Missing Values**
 
 ```python
 # Reload the dataset and handle missing values
@@ -297,7 +297,7 @@ df['total_rooms'] = df['total_rooms'].fillna(median)
 
 ---
 
-### 📦 **16. Identify Outliers**
+### 📦 **Identify Outliers**
 
 ```python
 # Select numeric columns and generate boxplots
@@ -321,7 +321,7 @@ plt.show()
 
 ---
 
-### ❌ **17. Remove Outliers with IQR Rule**
+### ❌ **Remove Outliers with IQR Rule**
 
 ```python
 # Function to drop outliers using 1.5*IQR method
@@ -362,7 +362,7 @@ fig.subplots_adjust(top=0.92, hspace=0.5)
 
 ---
 
-### 🧠 **18–22. Machine Learning Preprocessing**
+### 🧠 **Machine Learning Preprocessing**
 
 ```python
 # Import preprocessing and transformation tools
