@@ -343,3 +343,9 @@ processed_y_test  = scaler.transform(y_test.to_numpy().reshape(-1,1))
 ---
 
 ✅ Finalize transformed data ready for machine learning models.
+
+
+### 👨‍💻 **Author**
+
+**Yasser Ismail**
+Geospatial Engineer
