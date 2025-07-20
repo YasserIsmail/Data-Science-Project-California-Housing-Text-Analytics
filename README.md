@@ -7,21 +7,32 @@ This project provides a comprehensive analysis and visualization of the Californ
 - Outlier detection and removal
 - Machine learning preprocessing
 
----
 
-### 📦 **Import Libraries**
+### 📦1. **Import Libraries**
 
 ```python
+# Importing pandas for data manipulation and analysis (tables, DataFrames)
 import pandas as pd
+
+# Importing numpy for numerical computations and working with arrays
 import numpy as np
+
+# Importing seaborn for enhanced data visualization (built on matplotlib)
 import seaborn as sns
+
+# Importing matplotlib for plotting and visualizing data (line charts, histograms, etc.)
 import matplotlib.pyplot as plt
+
+# Importing geopandas for working with geospatial data (e.g., shapefiles, GeoJSON)
 import geopandas as gpd
-```
+````
 
-> Import necessary Python libraries for data manipulation, visualization, and geospatial processing.
+> These libraries form the core stack for data analysis, visualization, and geospatial processing in Python.
+>
+> * `pandas` and `numpy`: essential for handling structured and numerical data.
+> * `seaborn` and `matplotlib`: used to create clear and insightful visualizations.
+> * `geopandas`: enables spatial analysis using vector data like points, lines, and polygons.
 
----
 
 ### 📂 **1. Load the housing.csv file**
 
