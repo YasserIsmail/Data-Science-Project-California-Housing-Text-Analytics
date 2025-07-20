@@ -80,7 +80,29 @@ plt.title('\'median_house_value\' Correlation Matrix Heatmap', pad=20, fontsize=
 ```
 ![correlation with house value](plots/cell_output_0.png)
 
-### 🖊 **Comment on Correlations**
+### 🔍**Comment on Correlations**
+This heatmap visualizes the **correlation between various housing features and `median_house_value`** in the California housing dataset.
+
+* **Strongest Positive Correlation:**
+
+  * `median_income` has a high positive correlation of **+0.69** with house value.
+
+    > 💡 This means areas with higher median income tend to have significantly higher house prices.
+
+* **Moderate Positive Correlations:**
+
+  * `population_per_household` (+0.21), `rooms_per_household` (+0.15), and `total_rooms` (+0.13) show mild positive relationships.
+  * These suggest that more crowded or larger households are slightly associated with higher house values.
+
+* **Weak or Near-Zero Correlations:**
+
+  * `population`, `total_bedrooms`, and `households` have negligible influence individually on house value.
+
+* **Negative Correlations:**
+
+  * `latitude` (-0.14) and `longitude` (-0.045) have negative correlations.
+
+    > 📍 This indicates some **geographic trend** — likely, locations further south or inland have lower house values.
 
 ---
 
