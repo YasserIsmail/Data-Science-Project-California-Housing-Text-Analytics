@@ -45,105 +45,123 @@ df = pd.read_csv('housing.csv')
 > The DataFrame allows for structured analysis, filtering, and visualization of the housing data.
 
 
-### 🧹 **2. Drop Missing Values**
+### 🧹 **3. Drop Missing Values**
 
 ```python
+# Remove all rows that contain any missing values
 df.dropna(inplace=True)
 ```
 
-> Remove all rows that contain any missing values.
+> This command removes any row in the DataFrame that contains at least one missing (NaN) value.  
+> The `inplace=True` parameter ensures the change is applied directly to the original DataFrame.
 
----
-
-### 🧮 **3. Compute rooms per household**
+### 🧮 **4. Compute rooms per household**
 
 ```python
-df['rooms_per_household'] = df['total_rooms']/df['households']
+# Add a new column that calculates average rooms per household
+df['rooms_per_household'] = df['total_rooms'] / df['households']
 ```
 
-> Add a new column that calculates average rooms per household.
+> This feature helps measure housing density by dividing the total number of rooms by the number of households.  
+> It is useful for understanding residential space allocation.
 
 ---
 
-### 🧮 **4. Compute population per household**
+### 🧮 **5. Compute population per household**
 
 ```python
-df['population_per_household'] = df['total_rooms']/df['population']
+# Add a new column that calculates population per household (note: the original formula uses total_rooms)
+df['population_per_household'] = df['total_rooms'] / df['population']
 ```
 
-> Add a new column that calculates rooms per person (likely meant to be population per household).
+> This line computes a ratio, but it's likely mislabeled — dividing `total_rooms` by `population` actually gives rooms per person, not population per household.  
+> To get the true population per household, use:  
+> `df['population_per_household'] = df['population'] / df['households']`
 
----
 
-### 📊 **5. Average house value for homes <= 50 years**
+### 📊 **6. Average house value for homes <= 50 years**
 
 ```python
-housing_median_age_lessEqual50= df.loc[(df['housing_median_age']<=50),'median_house_value']
+# Filter house values for homes that are 50 years old or less
+housing_median_age_lessEqual50 = df.loc[(df['housing_median_age'] <= 50), 'median_house_value']
+
+# Calculate the average (mean) house value for these filtered homes
 housing_median_age_lessEqual50.mean()
 ```
 
-> Filter and calculate mean house value for houses 50 years old or less.
+> This section calculates the mean value of houses that are 50 years old or younger.  
+> It's useful for analyzing how age affects housing prices.
 
 ---
 
-### 🔗 **6. Calculate correlation with house value**
+### 🔗 **7. Calculate correlation with house value**
 
 ```python
+# Compute correlation of all columns with 'median_house_value'
 median_house_correlation = df.corr()[['median_house_value']]
 ```
 
-> Generate correlation of each column with `median_house_value`.
+> This command generates a correlation matrix that shows how each feature is related to `median_house_value`.
 
 ```python
+# Display the correlation values
 median_house_correlation
 ```
 
-> Display correlation table.
+> This displays the correlation table in the output.
 
 ```python
-median_house_correlation.sort_values(by='median_house_value',inplace=True)
+# Sort the correlation values in ascending order
+median_house_correlation.sort_values(by='median_house_value', inplace=True)
 ```
 
-> Sort the correlation values in ascending order.
+> Sorting helps quickly identify which variables have the strongest positive or negative relationship with house value.
 
 ```python
+# Plot the sorted correlation values as a heatmap
 plt.figure(figsize=(4, 8))
 sns.heatmap(median_house_correlation, annot=True, cmap='rocket')
-plt.title('\'median_house_value\' Correlation Matrix Heatmap',pad=20,fontsize=15)
+plt.title('\'median_house_value\' Correlation Matrix Heatmap', pad=20, fontsize=15)
 ```
 
-> Visualize the sorted correlation values using a heatmap.
+> This heatmap visually highlights the strength and direction of correlation for each feature with `median_house_value`.
 
 ---
 
 ### 🖊 **Comment on Correlations**
 
-> Provide interpretation of what features influence house values.
+> Use this section to analyze and interpret the correlation values.  
+> Which features are most positively or negatively correlated with house value?  
+> For example:  
+> - High correlation: `median_income`  
+> - Negative correlation: `latitude`, `longitude`  
+> These insights guide feature selection in predictive modeling.
 
----
-
-### 📈 **7. Regression Plot: Income vs House Value**
+### 📈 **8. Regression Plot: Income vs House Value**
 
 ```python
+# Create a regression jointplot to visualize income vs house value
 plt.figure(figsize=(12, 8))
-sns.jointplot(x='median_income', y='median_house_value', data=df, kind='reg' ,line_kws={'color': 'red'}, height=8)
+sns.jointplot(x='median_income', y='median_house_value', data=df, kind='reg', line_kws={'color': 'red'}, height=8)
 ```
 
-> Create a regression jointplot to visualize relationship between income and house price.
+> This plot shows how `median_income` is linearly related to `median_house_value` using a regression line.
 
 ---
 
-### 🗺 **8–9. Scatterplot with Spatial Reference**
+### 🗺 **9. Scatterplot with Spatial Reference**
 
 ```python
+# Load California boundary shapefile and set CRS to EPSG:4326
 gdf = gpd.read_file('ca_state.zip')
-gdf.to_crs(4326,inplace=True)
+gdf.to_crs(4326, inplace=True)
 ```
 
-> Load California boundary shapefile and convert to standard CRS (EPSG:4326).
+> Load spatial boundary data and reproject it to a standard geographic coordinate system.
 
 ```python
-axis = gdf.plot(figsize=(10,12),color='lightgray', edgecolor='black', alpha=0.3)
+# Plot housing data as spatially-referenced points over California
+axis = gdf.plot(figsize=(10,12), color='lightgray', edgecolor='black', alpha=0.3)
 sns.scatterplot(
     ax=axis,
     data=df,
@@ -162,101 +180,110 @@ axis.set_ylabel('Latitude', fontsize=12)
 plt.legend(fontsize=12, bbox_to_anchor=(1, 1), loc='upper left')
 ```
 
-> Plot housing data as a georeferenced scatterplot over California map.
+> Overlay a geospatial scatterplot of housing data on the California map, with house value and population as visual indicators.
 
 ---
 
 ### 💰 **10. Categorize Income**
 
 ```python
+# Compute income quantiles for binning
 q1 = df['median_income'].quantile(0.25)
 q2 = df['median_income'].quantile(0.5)
 q3 = df['median_income'].quantile(0.75)
 at95 = df['median_income'].quantile(0.95)
 ```
 
-> Compute income thresholds for categorical binning.
+> These thresholds are used to categorize households based on income distribution.
 
 ```python
+# Create a new column for income categories
 df['income_cat'] = pd.Series(dtype='object')
 ```
 
-> Create empty column for income category.
+> Initialize an empty column to store income class labels.
 
 ```python
-# Assign income categories based on quartiles
-df.loc[df['median_income']<q1,'income_cat'] = 'Low'
-df.loc[(df['median_income']>=q1)&(df['median_income']<q2),'income_cat'] = 'Below average'
-df.loc[(df['median_income']>=q2)&(df['median_income']<q3),'income_cat'] = 'Above average'
-df.loc[(df['median_income']>=q3)&(df['median_income']<at95),'income_cat'] = 'High'
-df.loc[df['median_income']>=at95,'income_cat'] = 'Very high'
+# Assign income categories based on income quantiles
+df.loc[df['median_income'] < q1, 'income_cat'] = 'Low'
+df.loc[(df['median_income'] >= q1) & (df['median_income'] < q2), 'income_cat'] = 'Below average'
+df.loc[(df['median_income'] >= q2) & (df['median_income'] < q3), 'income_cat'] = 'Above average'
+df.loc[(df['median_income'] >= q3) & (df['median_income'] < at95), 'income_cat'] = 'High'
+df.loc[df['median_income'] >= at95, 'income_cat'] = 'Very high'
 ```
 
-> Label each row with appropriate income category.
+> Label each household based on income quartile.
 
 ---
 
 ### 📊 **11. Histogram of Income Category by Ocean Proximity**
 
 ```python
+# Show distribution of income categories by ocean proximity
 plt.figure(figsize=(12, 8))
-sns.histplot(data=df.sort_values(by='median_income'),x='income_cat',hue='ocean_proximity',multiple='dodge')
-plt.grid(True, alpha=0.6,axis='y')
+sns.histplot(data=df.sort_values(by='median_income'), x='income_cat', hue='ocean_proximity', multiple='dodge')
+plt.grid(True, alpha=0.6, axis='y')
 ```
 
-> Visualize income category distributions, broken down by proximity to ocean.
+> Explore how income categories differ by geographic proximity to the ocean.
 
 ---
 
 ### 📉 **12. Bar Plot: Income Category vs House Value**
 
 ```python
+# Compare house values by income category
 plt.figure(figsize=(12, 8))
-plt.grid(True, alpha=0.6,axis='y')
-sns.barplot(x='income_cat',y='median_house_value',data=df.sort_values(by='median_income'))
+plt.grid(True, alpha=0.6, axis='y')
+sns.barplot(x='income_cat', y='median_house_value', data=df.sort_values(by='median_income'))
 ```
 
-> Compare average house value across income categories.
+> Visualize average housing prices across different income levels.
 
 ---
 
 ### 🌊 **13. Bar Plot: Ocean Proximity vs House Value**
 
 ```python
+# Compare house values by proximity to the ocean
 plt.figure(figsize=(12, 8))
-sns.barplot(x='ocean_proximity',y='median_house_value',data=df)
-plt.grid(True, alpha=0.6,axis='y')
+sns.barplot(x='ocean_proximity', y='median_house_value', data=df)
+plt.grid(True, alpha=0.6, axis='y')
 ```
 
-> Analyze how house value varies with proximity to ocean.
+> Evaluate how location near the ocean affects housing prices.
 
 ---
 
 ### 🔥 **14. Heatmap: Income Category vs Ocean Proximity**
 
 ```python
-# Group and compute mean house values by category
+# Create a pivot table of average house values by income category and ocean proximity
 heatmap_df = df[['ocean_proximity','income_cat','median_house_value']]
 groups = heatmap_df.groupby(['ocean_proximity','income_cat'])
+
 df_list = []
 for i in groups.groups:
-    df_list.append([i[0],i[1],groups.get_group(i)['median_house_value'].mean()])
-heatmap_df = pd.DataFrame(df_list,columns=['ocean_proximity','income_cat','median_house_value'])
-heatmap_df = heatmap_df.pivot('income_cat', 'ocean_proximity','median_house_value')
-heatmap_df.drop(columns=['ISLAND'],inplace=True)
-heatmap_df.sort_values(by=['<1H OCEAN','INLAND','NEAR BAY','NEAR OCEAN'],inplace=True)
+    df_list.append([i[0], i[1], groups.get_group(i)['median_house_value'].mean()])
 
+heatmap_df = pd.DataFrame(df_list, columns=['ocean_proximity','income_cat','median_house_value'])
+heatmap_df = heatmap_df.pivot('income_cat', 'ocean_proximity', 'median_house_value')
+heatmap_df.drop(columns=['ISLAND'], inplace=True)
+heatmap_df.sort_values(by=['<1H OCEAN','INLAND','NEAR BAY','NEAR OCEAN'], inplace=True)
+
+# Plot heatmap
 plt.figure(figsize=(12, 8))
 sns.heatmap(heatmap_df, annot=True, fmt=".0f", linewidths=0.5)
 ```
 
-> Create a heatmap to show average house values based on both income and location.
+> A detailed view of how both income and ocean proximity affect house values.
 
 ---
 
 ### 🔁 **15. Reload Data and Fill Missing Values**
 
 ```python
+# Reload the dataset and handle missing values
 df = pd.read_csv('housing.csv')
 mean = df['total_bedrooms'].mean()
 df['total_bedrooms'] = df['total_bedrooms'].fillna(mean)
@@ -265,127 +292,136 @@ median = df['total_rooms'].median()
 df['total_rooms'] = df['total_rooms'].fillna(median)
 ```
 
-> Reload dataset and fill missing values with mean/median.
-
-> (KNN Imputer code is provided but commented out.)
+> Reimport data and fill missing values using mean or median.  
+> (KNN imputer is optional and commented out.)
 
 ---
 
 ### 📦 **16. Identify Outliers**
 
 ```python
+# Select numeric columns and generate boxplots
 num_df = df.select_dtypes(np.number)
 
-# Generate boxplots to visually inspect outliers
 plt.figure(figsize=(15, 8))
 ncols = 3
 num_features = len(num_df.columns)
 nrows = (num_features + 1) // ncols
+
 for i, column in enumerate(num_df.columns, 1):
-    plt.subplot(nrows,ncols, i)
+    plt.subplot(nrows, ncols, i)
     sns.boxplot(x=df[column])
     plt.title(f'Boxplot of {column}')
+
 plt.tight_layout()
 plt.show()
 ```
 
-> Plot boxplots for numeric columns to detect outliers.
+> Use boxplots to visually inspect potential outliers in numeric data.
 
 ---
 
 ### ❌ **17. Remove Outliers with IQR Rule**
 
 ```python
+# Function to drop outliers using 1.5*IQR method
 def drop_outliers(df):
     columns = df.select_dtypes(np.number)
     for col in columns:
         q1 = df[col].quantile(0.25)
         q3 = df[col].quantile(0.75)
-        iqr = q3-q1
-        lower_bound = q1-1.5*iqr
-        upper_bound = q3+1.5*iqr
-        df = df.loc[(df[col]>=lower_bound)&(df[col]<=upper_bound)]
+        iqr = q3 - q1
+        lower_bound = q1 - 1.5 * iqr
+        upper_bound = q3 + 1.5 * iqr
+        df = df.loc[(df[col] >= lower_bound) & (df[col] <= upper_bound)]
     return df
 
 df_droped_outlier = drop_outliers(df)
 ```
 
-> Define and apply a function to remove outliers using the 1.5\*IQR rule.
+> Identify and eliminate extreme outliers using interquartile range.
 
 ```python
-# Boxplots before and after removing outliers
+# Boxplots to compare before/after outlier removal
 nrows = len(num_df.columns)
 fig, axes = plt.subplots(nrows, 2, figsize=(15, 30))
+
 for i, column in enumerate(num_df.columns):
     sns.boxplot(x=df[column], ax=axes[i, 0]) 
-    axes[i, 0].set_title(f'{column}',fontsize=14, fontweight='bold')
+    axes[i, 0].set_title(f'{column}', fontsize=14, fontweight='bold')
     sns.boxplot(x=df_droped_outlier[column], ax=axes[i, 1])  
-    axes[i, 1].set_title(f'{column}',fontsize=14, fontweight='bold')    
+    axes[i, 1].set_title(f'{column}', fontsize=14, fontweight='bold')
+
 fig.text(0.25, 0.95, 'Left: Original Data', ha='center', va='center', fontsize=16, fontweight='bold')
 fig.text(0.75, 0.95, 'Right: Data with Outliers Removed', ha='center', va='center', fontsize=16, fontweight='bold')
 plt.tight_layout()
 fig.subplots_adjust(top=0.92, hspace=0.5)
 ```
 
-> Compare before and after removing outliers using side-by-side boxplots.
+> Visualize and compare the impact of removing outliers across all numeric features.
 
 ---
 
 ### 🧠 **18–22. Machine Learning Preprocessing**
 
 ```python
+# Import preprocessing and transformation tools
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MinMaxScaler,OneHotEncoder
+from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 ```
 
-> Import preprocessing and transformation tools.
+> Required tools for splitting, normalizing, and encoding data before modeling.
 
 ```python
+# Prepare features and target
 X = df.drop(columns=['longitude','latitude','median_house_value']) 
 y = df['median_house_value']
 ```
 
-> Prepare features `X` and target `y` for prediction. Remove spatial columns.
+> Remove non-informative or spatial columns and isolate target variable.
 
 ```python
-X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.3)
+# Split dataset into training and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
 ```
 
-> Split data into training and testing sets.
+> Use 70/30 split for training and evaluation.
 
 ```python
+# Initialize transformers
 scaler = MinMaxScaler()
 encoder = OneHotEncoder(handle_unknown='ignore')
 ```
 
-> Initialize scaler and encoder for normalization and categorical encoding.
+> Set up normalization for numeric data and encoding for categoricals.
 
 ```python
+# Identify numeric and categorical features
 num = X.select_dtypes(np.number)
 cat = X.select_dtypes(exclude=[np.number])
 ```
 
-> Separate numeric and categorical columns.
+> Separate columns for applying appropriate transformations.
 
 ```python
+# Build a column transformer pipeline
 processor = ColumnTransformer([
     ('scaler', scaler, num.columns),
     ('encoder', encoder, cat.columns)
 ])
 ```
 
-> Build a combined transformer to apply scaler and encoder.
+> Combine both scaling and encoding into a unified preprocessing pipeline.
 
 ```python
+# Apply transformations to training and test data
 processed_X_train = processor.fit_transform(X_train)
 processed_X_test = processor.transform(X_test)
 processed_y_train = scaler.fit_transform(np.array(y_train.to_numpy().reshape(-1,1)))
 processed_y_test  = scaler.transform(y_test.to_numpy().reshape(-1,1))
 ```
 
-> Apply transformations to both training and test sets.
+> Finalize transformed data ready for machine learning models.
 
 ---
-
-Let me know if you want the markdown version with comments added directly inline.
